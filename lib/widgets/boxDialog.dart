@@ -5,6 +5,7 @@ class BoxDialog extends StatelessWidget {
   const BoxDialog({required this.button});
   final String button;
 
+
   // Définition de la fonction asynchrone
   Future<void> _showBoostContactDialog(BuildContext context) async {
     String? selectedRatio = 'Boost gratuit'; // Mettre "Boost gratuit" par défaut
@@ -45,6 +46,8 @@ class BoxDialog extends StatelessWidget {
                       ),
                     ),
                     if (selectedRatio == 'Boost gratuit') ...[
+                      SizedBox(height: 10,),
+                      
                       DropdownButtonFormField<String>(
                         value: selectedFormula,
                         onChanged: (value) {
@@ -98,7 +101,9 @@ class BoxDialog extends StatelessWidget {
                     if (selectedRatio == 'Boost gratuit') {
                       print('Formule sélectionnée: $selectedFormula');
                     }
-                    print('Montant du boost: $boostAmount');
+                    else{
+                      print('Montant du boost: $boostAmount');
+                    }
                     Navigator.of(context).pop();
                   },
                 ),

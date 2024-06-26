@@ -1,7 +1,6 @@
-
-import 'package:dressur/data/DataItemPresentation.dart';
-import 'package:dressur/pages/HomePage.dart';
+import 'package:dressur/model/DataItemPresentation.dart';
 import 'package:dressur/widgets/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter/material.dart';
 
@@ -125,8 +124,10 @@ Widget getSartedbuild(BuildContext context){
       borderRadius: BorderRadius.circular(8)
     ),
     child: TextButton(
-      onPressed: (){
-         Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) => HomePage(),));
+      onPressed: () async{
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('lastPage', '/home');
+         Navigator.pushReplacementNamed(context,'/home');
       }, 
       child: Text("Commencer",style: TextStyle(
         color: Colors.white

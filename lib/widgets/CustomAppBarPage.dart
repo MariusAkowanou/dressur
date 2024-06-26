@@ -20,7 +20,7 @@ class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       elevation: 1.0,
-      centerTitle: true,
+      /*centerTitle: true,
       title: Text(
         
         title,
@@ -28,7 +28,7 @@ class CustomAppBarPage extends StatelessWidget implements PreferredSizeWidget {
           color: primaryColor,
           fontSize: 20
         ),
-      ),
+      ),*/
       leadingWidth: 100,
       leading:Container(
         padding: EdgeInsets.only(top: 13),

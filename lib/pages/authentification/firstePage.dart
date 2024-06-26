@@ -1,7 +1,9 @@
-import 'package:dressur/pages/HomePage.dart';
+import 'package:dressur/pages/presantationPage.dart';
 import 'package:dressur/pages/authentification/sinUpPage.dart';
 import 'package:dressur/pages/authentification/LoginPage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+
 
 class FistView extends StatefulWidget {
   const FistView({Key? key}) : super(key: key);
@@ -43,7 +45,7 @@ class _FistViewState extends State<FistView> {
           Container(
             
             padding: EdgeInsets.only(top: 12,),
-            height: 150,
+            height: 200,
             width: width * .9,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20), color: Colors.white),
@@ -68,15 +70,19 @@ class _FistViewState extends State<FistView> {
                   child: TextButton.icon(
                       onPressed: () {
                         
-                              Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => HomePage()));
+                              Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => PresentationPage()));
                       },
-                      icon: Icon(
-                        Icons.android_sharp,
+                      icon: FaIcon(
+                        FontAwesomeIcons.google,
+                        size: 20,
                         color: Colors.white,
                       ),
                       label: Text(
                         'Google',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20
+                        ),
                       )),
                 ),
                 /*------------------------------------------------*/

@@ -1,4 +1,5 @@
 import 'package:dressur/widgets/CustomAppBar.dart';
+import 'package:dressur/widgets/color.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -94,20 +95,33 @@ class _ProfilPageState extends State<ProfilPage> {
               ),
               
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Faire quelque chose avec les données du formulaire
-                    // Par exemple, enregistrer les modifications du profil
-                    // Vous pouvez accéder aux données à l'aide des contrôleurs
-                    print('Nom: ${_nameController.text}');
-                    print('Prénom: ${_surnameController.text}');
-                    print('Pseudo: ${_usernameController.text}');
-                    print('Email: ${_emailController.text}');
-                    print('Téléphone: $_phoneNumber');
-                  }
-                },
-                child: Text('Valider'),
+              
+               Container(
+                width: MediaQuery.of(context).size.width * .7,
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: TextButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                       // Faire quelque chose avec les données du formulaire
+                      // Par exemple, enregistrer les modifications du profil
+                      // Vous pouvez accéder aux données à l'aide des contrôleurs
+                      print('Nom: ${_nameController.text}');
+                      print('Prénom: ${_surnameController.text}');
+                      print('Pseudo: ${_usernameController.text}');
+                      print('Email: ${_emailController.text}');
+                      print('Téléphone: $_phoneNumber');
+                    
+                      
+                    }
+                  },
+                  child: Text(
+                    'Valider',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ),
               ),
             ],
           ),

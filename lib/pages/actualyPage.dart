@@ -1,5 +1,4 @@
-
-import 'package:dressur/data/PubDataItems.dart';
+import 'package:dressur/model/PubDataItems.dart';
 import 'package:dressur/widgets/BoostAction.dart';
 import 'package:dressur/widgets/CustomActualaty.dart';
 import 'package:dressur/widgets/CustomAppBarPage.dart';

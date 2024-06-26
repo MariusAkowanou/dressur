@@ -1,8 +1,8 @@
-import 'package:dressur/pages/authentification/sinUpPage.dart';
-import 'package:dressur/pages/detail/setting/profilPage.dart';
-import 'package:dressur/pages/detail/setting/validationPage.dart';
+import 'package:dressur/pages/authentification/firstePage.dart';
 import 'package:dressur/widgets/CustomAppBarPage.dart';
+import 'package:dressur/widgets/color.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -25,9 +25,28 @@ class _SettingPageState extends State<SettingPage> {
           _buildAboutSection(),
           Divider(),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Déconnexion'),
-          ),
+              leading: Icon(Icons.exit_to_app),
+              title: Container(
+                
+                child: TextButton(
+                   style: TextButton.styleFrom(
+                    foregroundColor: const Color.fromARGB(255, 5, 5, 5),
+                    alignment: Alignment.centerLeft,
+                  ),
+                  child: Text("Deconnexion"),
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setBool('isLoggedIn', false);
+                    await prefs.setString('lastPage', '/fistView');
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => FistView()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                ),
+              )),
         ],
       ),
     );
@@ -45,12 +64,11 @@ class _SettingPageState extends State<SettingPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
-          SizedBox(height: 10),
-        
-          Divider(),
+        SizedBox(height: 10),
+        Divider(),
         TitleInfoBuld(),
-        _buildListItem(Icons.person, 'Modifier mon profil' ,ProfilPage()),
-        _buildListItem(Icons.verified, 'Verification' ,ValidationPage()),
+        _buildListItem(Icons.person, 'Modifier mon profil', '/profil'),
+        _buildListItem(Icons.verified, 'Verification', '/validation'),
       ],
     );
   }
@@ -58,9 +76,11 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildBonusSection() {
     return Column(
       children: [
-        _buildListItem(Icons.people, 'Parrainage' ,SinUpPage()),
-        _buildListItem(Icons.card_giftcard_outlined, 'Mes code Promo' ,SinUpPage()),
-        _buildListItem(Icons.wallet_membership, 'Carte de visite' ,SinUpPage()),
+        _buildListItem(Icons.people, 'Parrainage', '/validation'),
+        _buildListItem(
+            Icons.card_giftcard_outlined, 'Mes code Promo', '/validation'),
+        _buildListItem(
+            Icons.wallet_membership, 'Carte de visite', '/validation'),
       ],
     );
   }
@@ -68,9 +88,11 @@ class _SettingPageState extends State<SettingPage> {
   Widget _buildAboutSection() {
     return Column(
       children: [
-        _buildListItem(Icons.info_outline, 'A propos' ,SinUpPage()),
-        _buildListItem(Icons.card_giftcard_outlined, 'Signaler un utilisateur' ,SinUpPage()),
-        _buildListItem(Icons.wallet_membership, 'Support client' ,SinUpPage()),
+        _buildListItem(Icons.info_outline, 'A propos', '/validation'),
+        _buildListItem(Icons.card_giftcard_outlined, 'Signaler un utilisateur',
+            '/validation'),
+        _buildListItem(
+            Icons.wallet_membership, 'Support client', '/validation'),
       ],
     );
   }
@@ -89,7 +111,7 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  Widget _buildListItem(IconData icon, String label, Widget page) {
+  Widget _buildListItem(IconData icon, String label, String page) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(left: 20),
@@ -98,12 +120,15 @@ class _SettingPageState extends State<SettingPage> {
           alignment: Alignment.centerLeft,
         ),
         onPressed: () {
-          Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
+          Navigator.pushNamed(
+            context,
+            page,
+          );
         },
-        icon: Icon(icon),
+        icon: Icon(
+          icon,
+          color: SecondColor,
+        ),
         label: Text(label, style: TextStyle(color: Colors.black)),
       ),
     );

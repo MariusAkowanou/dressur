@@ -1,7 +1,10 @@
-import 'package:dressur/pages/authentification/LoginPage.dart';
+import 'package:dressur/model/authUser.dart';
+import 'package:dressur/model/data_base.dart';
+import 'package:dressur/pages/presantationPage.dart';
 import 'package:dressur/widgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SinUpPage extends StatefulWidget {
   const SinUpPage({super.key});
@@ -15,7 +18,7 @@ class _SinUpPageState extends State<SinUpPage> {
   final _usermailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameUserController = TextEditingController();
-    final _numUserController = TextEditingController();
+  final _numUserController = TextEditingController();
   String _phoneNumber = '';
 
   // FocusNodes pour chaque champ
@@ -29,6 +32,7 @@ class _SinUpPageState extends State<SinUpPage> {
   
 
   bool _passwordVisible = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -158,28 +162,56 @@ class _SinUpPageState extends State<SinUpPage> {
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(10)),
                 child: TextButton(
-                    onPressed: () {
+                    onPressed: ()  async {
                       if (_formKey.currentState!.validate()) {
+                        setState(() {
+                         _isLoading = true; // Activer l'état de chargement
+                        });
+
                         String usermail = _usermailController.text;
                         String password = _passwordController.text;
                         String numUser = _phoneNumber;
                         String nameUser = _nameUserController.text;
-
-                        print('Usermail: $usermail');
-                        print('Mot de passe: $password');
-                        print('Numéro utilisateur: $numUser');
-                        print('Nom utilisateur: $nameUser');
-
-                        _usermailController.clear();
-                        _passwordController.clear();
-                        _nameUserController.clear();
-                        _numUserController.clear();
                         
-                      }
+                        String resul = await inscription(nameUser, numUser, usermail, password);
+                        //final sendMail= await sendVerificationCode(usermail);
+                        print(resul);
+                        setState(() {
+                          _isLoading = false; // Désactiver l'état de chargement
+                        
+                        });
+                        if (resul == 'succes') {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('isLoggedIn', true);
+                          await prefs.setString('lastPage', '/presentation');
 
-                      
+                          sendVerificationCodeToUser(usermail);
+                         // print(verification);
+                          _usermailController.clear();
+                          _passwordController.clear();
+                          _nameUserController.clear();
+                          _numUserController.clear();
+                          
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => PresentationPage()),
+                            (Route<dynamic> route) => false,
+                          );
+                          
+                        }else{
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(resul),
+                              duration: Duration(seconds: 20),
+                            ),
+                          );
+                        }
+                      }
                     },
-                    child: Text(
+                    child: _isLoading? 
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ):Text(
                       "S'inscrire",
                       style: TextStyle(color: Colors.white),
                     )),
@@ -192,8 +224,10 @@ class _SinUpPageState extends State<SinUpPage> {
                   ),
                   Flexible(
                       child: TextButton(
-                          onPressed: () {
-                             Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => LoginPage()));
+                          onPressed: () async {
+                             SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('lastPage', '/presentation');
+                             Navigator.pushReplacementNamed(context, '/login');
                           }, child: Text("Se connecté ")))
                 ],
               )
@@ -203,4 +237,14 @@ class _SinUpPageState extends State<SinUpPage> {
       ),
     );
   }
+}
+
+void sendVerificationCodeToUser(String email) async {
+ String? userUid = await DatabaseHelper().getUserUid(email);
+ if (userUid != null) {
+    String result = await sendVerificationCode(email, userUid);
+    print(result);
+ } else {
+    print('Utilisateur non trouvé');
+ }
 }

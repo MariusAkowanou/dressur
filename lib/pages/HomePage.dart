@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
         height: 70,
         elevation: 4,
         selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
+        onDestinationSelected: (index) async{
           setState(() {
             _currentIndex = index;
           });

@@ -1,5 +1,6 @@
 import 'package:dressur/widgets/color.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -29,8 +30,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       leading: IconButton(
-         onPressed: () {
-          // Ajouter la logique pour la navigation de retour ici
+         onPressed: () async{
+         
           Navigator.pop(context);
         },
         icon: Icon(
@@ -40,9 +41,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () async{
+             // Ajouter la logique pour la navigation de retour ici
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            // Supprimer les informations d'authentification
+            await prefs.remove('lastPage');
+          },
           icon: Icon(
             Icons.info,
+            
             color: Color.fromARGB(255, 5, 39, 159),
           ),
         ),

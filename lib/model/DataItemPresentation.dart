@@ -1,4 +1,5 @@
-import 'package:dressur/data/DataInfo.dart';
+
+import 'package:dressur/model/DataInfo.dart';
 
 class DataItemPresentation{
   List<DataInfo> items = [
